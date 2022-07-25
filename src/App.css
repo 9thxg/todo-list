@@ -1,0 +1,11 @@
+.App {
+  display: flex;
+}
+
+.Header {
+  display: flex;
+}
+
+.DayOfWeek {
+  display: flex;
+}
