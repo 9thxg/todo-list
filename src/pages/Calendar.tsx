@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import Block from "../components/Block";
 
 const Calendar = ({ date }: { date: Date }) => {
   const dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
-  const [range, setRange] = useState({ first: 0, last: 0 });
+  const [range, setRange] = useState({ first: date, last: date });
 
   useEffect(() => {
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDate();
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
     const lastDay = new Date(
       date.getFullYear(),
       date.getMonth() + 1,
@@ -13,29 +14,30 @@ const Calendar = ({ date }: { date: Date }) => {
       23,
       59,
       59
-    ).getDate();
+    );
     setRange({ first: firstDay, last: lastDay });
-    console.log(firstDay, lastDay);
-    console.log(range);
   }, [date]);
 
   function makeBox() {
     const boxs = [];
-    for (let i = range.first; i < range.last + 1; i++) {
-      boxs.push(<div>{i}</div>);
+    for (let i = 0; i < range.first.getDay(); i++) {
+      boxs.push(<Block />);
+    }
+    for (let i = range.first.getDate(); i < range.last.getDate() + 1; i++) {
+      boxs.push(<Block date={i} />);
     }
     return boxs;
   }
 
   return (
     <div className="Calendar">
-      <div className="DayOfWeek">
+      <div className="GridContainer">
         {dayOfWeek.map((it) => (
           <div>{it}</div>
         ))}
       </div>
 
-      <div>{makeBox()}</div>
+      <div className="GridContainer">{makeBox()}</div>
     </div>
   );
 };
