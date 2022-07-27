@@ -31,9 +31,9 @@ const Calendar = ({ date }: { date: Date }) => {
 
   return (
     <div className="Calendar">
-      <div className="GridContainer">
+      <div className="DayOfWeek">
         {dayOfWeek.map((it) => (
-          <div>{it}</div>
+          <div className="Day">{it}</div>
         ))}
       </div>
 

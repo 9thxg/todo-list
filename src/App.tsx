@@ -19,7 +19,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Sidebar />
-        <div>
+        <div className="Main">
           <div className="Header">
             <button onClick={decreaseMonth}>{"<"}</button>
             <div>{`${date.getFullYear()}년 ${date.getMonth() + 1}`}월</div>

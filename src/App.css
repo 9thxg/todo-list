@@ -1,12 +1,58 @@
 .App {
+  min-height: 100vh;
+}
+
+.App {
   display: flex;
+}
+
+.Sidebar {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  width: 20%;
+}
+
+.Main {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+  margin-left: 20px;
 }
 
 .Header {
   display: flex;
+  justify-content: space-around;
+
+  background-color: #cccccc;
+}
+
+.Calendar {
+}
+
+.DayOfWeek {
+  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: minmax(20px, auto);
+  text-align: right;
 }
 
 .GridContainer {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: minmax(110px, auto);
+  text-align: right;
+}
+
+.Day {
+  margin-right: 10px;
+  border: 1px solid #e2e2e2;
+}
+
+.block {
+  border: 1px solid #e2e2e2;
+}
+
+.block_date {
+  margin-right: 10px;
 }
