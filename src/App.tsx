@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter, Routes } from "react-router-dom";
 import "./App.css";
+import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Calendar from "./pages/Calendar";
 
@@ -20,11 +21,11 @@ function App() {
       <div className="App">
         <Sidebar />
         <div className="Main">
-          <div className="Header">
-            <button onClick={decreaseMonth}>{"<"}</button>
-            <div>{`${date.getFullYear()}년 ${date.getMonth() + 1}`}월</div>
-            <button onClick={increaseMonth}>{">"}</button>
-          </div>
+          <Header
+            date={date}
+            increase={increaseMonth}
+            decrease={decreaseMonth}
+          />
           <Calendar date={date} />
         </div>
       </div>
