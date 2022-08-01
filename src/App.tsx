@@ -91,6 +91,17 @@ function App() {
     setTodoList(data.filter((it) => firstDay <= it.date && it.date <= lastDay));
   }, [curDate, data, todoList]);
 
+  const switchDone = (targetId: number) => {
+    const todo = data.find((it) => targetId === it.id);
+    const doneTodo = { ...todo!, isDone: true };
+    const newData = data.map((it) =>
+      targetId === it.id ? { ...doneTodo } : it
+    );
+    setData(newData);
+    console.log(doneTodo);
+    console.log(data);
+  };
+
   const increaseMonth = () => {
     setCurDate(
       new Date(curDate.getFullYear(), curDate.getMonth() + 1, curDate.getDate())
@@ -113,7 +124,11 @@ function App() {
             increase={increaseMonth}
             decrease={decreaseMonth}
           />
-          <Calendar curDate={curDate} todoList={todoList} />
+          <Calendar
+            curDate={curDate}
+            todoList={todoList}
+            switchDone={switchDone}
+          />
         </div>
       </div>
     </BrowserRouter>

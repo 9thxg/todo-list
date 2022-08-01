@@ -1,3 +1,4 @@
+/* App.tsx */
 .App {
   min-height: 100vh;
 }
@@ -20,6 +21,7 @@
   margin-left: 20px;
 }
 
+/* Header.tsx */
 .Header {
   display: flex;
   justify-content: space-around;
@@ -27,6 +29,7 @@
   background-color: #cccccc;
 }
 
+/* Calendar.tsx */
 .Calendar {
 }
 
@@ -57,10 +60,71 @@
   border: 1px solid #e2e2e2;
 }
 
+/* Block.tsx */
 .block {
   border: 1px solid #e2e2e2;
 }
 
 .block_date {
   margin-right: 10px;
+}
+
+/* Item.tsx */
+.Item {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+
+  border: 1px solid #858585;
+  border-radius: 5px;
+
+  padding-right: 2px;
+  padding-left: 2px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+
+  margin-right: 5px;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+.Item .Todo_Content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+.Todo_Content .Content {
+  text-align: left;
+  font-size: 1rem;
+
+  margin-left: 5px;
+}
+
+.Todo_Content input {
+  cursor: pointer;
+  width: 1rem;
+  height: 1rem;
+}
+
+.Todo_Button {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+
+  margin-right: 3px;
+}
+
+.Todo_Button button {
+  cursor: pointer;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  font-size: 0.8rem;
+  padding: 1px;
+  margin-left: 2px;
 }

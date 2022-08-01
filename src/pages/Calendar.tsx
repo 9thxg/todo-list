@@ -5,9 +5,11 @@ import Block from "../components/Block";
 const Calendar = ({
   curDate,
   todoList,
+  switchDone,
 }: {
   curDate: Date;
   todoList: Data[];
+  switchDone: (targetId: number) => void;
 }) => {
   const dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
   const [range, setRange] = useState({ first: curDate, last: curDate });
@@ -28,11 +30,13 @@ const Calendar = ({
   function makeBox() {
     const boxs = [];
     for (let i = 0; i < range.first.getDay(); i++) {
-      boxs.push(<Block key={i + 32} />);
+      boxs.push(<Block key={i + 32} switchDone={switchDone} />);
     }
     for (let i = range.first.getDate(); i < range.last.getDate() + 1; i++) {
       const todos = todoList.filter((it) => new Date(it.date).getDate() === i);
-      boxs.push(<Block key={i} date={i} todos={todos} />);
+      boxs.push(
+        <Block key={i} date={i} todos={todos} switchDone={switchDone} />
+      );
     }
     return boxs;
   }
