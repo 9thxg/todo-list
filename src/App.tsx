@@ -70,33 +70,37 @@ const dummy: Data[] = [
 ];
 
 function App() {
-  const [date, setDate] = useState(new Date());
+  const [curDate, setCurDate] = useState(new Date());
   const [data, setData] = useState(dummy);
+  const [todoList, setTodoList] = useState(data);
 
   useEffect(() => {
-    console.log(date.getTime());
-    console.log(
-      new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate() + 1
-      ).getTime()
-    );
-    console.log(
-      new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate() - 1
-      ).getTime()
-    );
-  });
+    const firstDay = new Date(
+      curDate.getFullYear(),
+      curDate.getMonth(),
+      1
+    ).getTime();
+    const lastDay = new Date(
+      curDate.getFullYear(),
+      curDate.getMonth() + 1,
+      0,
+      23,
+      59,
+      59
+    ).getTime();
+    setTodoList(data.filter((it) => firstDay <= it.date && it.date <= lastDay));
+  }, [curDate, data, todoList]);
 
   const increaseMonth = () => {
-    setDate(new Date(date.getFullYear(), date.getMonth() + 1, date.getDate()));
+    setCurDate(
+      new Date(curDate.getFullYear(), curDate.getMonth() + 1, curDate.getDate())
+    );
   };
 
   const decreaseMonth = () => {
-    setDate(new Date(date.getFullYear(), date.getMonth() - 1, date.getDate()));
+    setCurDate(
+      new Date(curDate.getFullYear(), curDate.getMonth() - 1, curDate.getDate())
+    );
   };
 
   return (
@@ -105,11 +109,11 @@ function App() {
         <Sidebar />
         <div className="Main">
           <Header
-            date={date}
+            curDate={curDate}
             increase={increaseMonth}
             decrease={decreaseMonth}
           />
-          <Calendar date={date} datas={data} />
+          <Calendar curDate={curDate} todoList={todoList} />
         </div>
       </div>
     </BrowserRouter>
