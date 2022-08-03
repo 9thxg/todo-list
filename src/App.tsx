@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { BrowserRouter, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Calendar from "./pages/Calendar";
+import dummyData from "./dummyData.json";
+
+type Action_type = "INIT" | "EDIT";
 
 export interface Data {
   id: number;
@@ -12,67 +15,37 @@ export interface Data {
   isDone: boolean;
 }
 
-const dummy: Data[] = [
-  {
-    id: 1,
-    date: 1658934000000,
-    content: "work",
-    isDone: true,
-  },
-  {
-    id: 2,
-    date: 1658934000000,
-    content: "exercise",
-    isDone: false,
-  },
-  {
-    id: 3,
-    date: 1659085018082,
-    content: "work",
-    isDone: false,
-  },
-  {
-    id: 4,
-    date: 1659085018082,
-    content: "meeting",
-    isDone: false,
-  },
-  {
-    id: 5,
-    date: 1659106800000,
-    content: "work",
-    isDone: true,
-  },
-  {
-    id: 6,
-    date: 1659106800000,
-    content: "hang out",
-    isDone: false,
-  },
-  {
-    id: 7,
-    date: 1659085018082,
-    content: "이걸",
-    isDone: true,
-  },
-  {
-    id: 8,
-    date: 1659085018082,
-    content: "뚫고 지나갈려나",
-    isDone: true,
-  },
-  {
-    id: 9,
-    date: 1659085018082,
-    content: "단지 궁금할 뿐",
-    isDone: true,
-  },
-];
+interface Action {
+  type: Action_type;
+  todoList?: Data[];
+  todo?: Data;
+}
+
+const reducer = (state: Data[], action: Action): Data[] => {
+  let newState: Data[] = [];
+  switch (action.type) {
+    case "INIT": {
+      return action.todoList!;
+    }
+    case "EDIT": {
+      newState = state.map((it) =>
+        it.id === action.todo!.id ? { ...action.todo! } : it
+      );
+      break;
+    }
+  }
+  return newState;
+};
 
 function App() {
+  const [todoData, dispatch] = useReducer(reducer, []);
+
   const [curDate, setCurDate] = useState(new Date());
-  const [data, setData] = useState(dummy);
-  const [todoList, setTodoList] = useState(data);
+  const [todoList, setTodoList] = useState(todoData);
+
+  useEffect(() => {
+    dispatch({ type: "INIT", todoList: dummyData });
+  }, []);
 
   useEffect(() => {
     const firstDay = new Date(
@@ -88,18 +61,15 @@ function App() {
       59,
       59
     ).getTime();
-    setTodoList(data.filter((it) => firstDay <= it.date && it.date <= lastDay));
-  }, [curDate, data, todoList]);
+    setTodoList(
+      todoData.filter((it) => firstDay <= it.date && it.date <= lastDay)
+    );
+  }, [curDate, todoData]);
 
   const switchDone = (targetId: number) => {
-    const todo = data.find((it) => targetId === it.id);
+    const todo = todoData.find((it) => targetId === it.id);
     const doneTodo = { ...todo!, isDone: true };
-    const newData = data.map((it) =>
-      targetId === it.id ? { ...doneTodo } : it
-    );
-    setData(newData);
-    console.log(doneTodo);
-    console.log(data);
+    dispatch({ type: "EDIT", todo: doneTodo });
   };
 
   const increaseMonth = () => {
