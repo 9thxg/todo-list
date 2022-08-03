@@ -8,11 +8,13 @@ const Header = ({
   increase: () => void;
 }) => {
   return (
-    <div className="Header">
+    <header>
       <button onClick={decrease}>{"<"}</button>
-      <div>{`${curDate.getFullYear()}년 ${curDate.getMonth() + 1}`}월</div>
+      <div className="header-date">
+        {`${curDate.getFullYear()}년 ${curDate.getMonth() + 1}`}월
+      </div>
       <button onClick={increase}>{">"}</button>
-    </div>
+    </header>
   );
 };
 
