@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, createContext } from "react";
 import { BrowserRouter, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
@@ -37,6 +37,10 @@ const reducer = (state: Data[], action: Action): Data[] => {
   return newState;
 };
 
+export const TodoListContext = createContext<Data[] | undefined>(undefined);
+
+export const DispatchContext = createContext<{} | undefined>(undefined);
+
 function App() {
   const [todoData, dispatch] = useReducer(reducer, []);
 
@@ -66,10 +70,11 @@ function App() {
     );
   }, [curDate, todoData]);
 
-  const switchDone = (targetId: number) => {
+  const onToggle = (targetId: number) => {
     const todo = todoData.find((it) => targetId === it.id);
-    const doneTodo = { ...todo!, isDone: true };
+    const doneTodo = { ...todo!, isDone: !todo!.isDone };
     dispatch({ type: "EDIT", todo: doneTodo });
+    console.log(todoData);
   };
 
   const increaseMonth = () => {
@@ -85,23 +90,23 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
-      <div className="App">
-        <Sidebar />
-        <div className="Main">
-          <Header
-            curDate={curDate}
-            increase={increaseMonth}
-            decrease={decreaseMonth}
-          />
-          <Calendar
-            curDate={curDate}
-            todoList={todoList}
-            switchDone={switchDone}
-          />
-        </div>
-      </div>
-    </BrowserRouter>
+    <TodoListContext.Provider value={todoList}>
+      <DispatchContext.Provider value={{ onToggle }}>
+        <BrowserRouter>
+          <div className="App">
+            <Sidebar />
+            <div className="Main">
+              <Header
+                curDate={curDate}
+                increase={increaseMonth}
+                decrease={decreaseMonth}
+              />
+              <Calendar curDate={curDate} />
+            </div>
+          </div>
+        </BrowserRouter>
+      </DispatchContext.Provider>
+    </TodoListContext.Provider>
   );
 }
 

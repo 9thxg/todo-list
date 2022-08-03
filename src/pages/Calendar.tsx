@@ -1,18 +1,14 @@
-import { useEffect, useState } from "react";
-import { Data } from "../App";
+import { useEffect, useState, useContext, useRef } from "react";
+import { Data, TodoListContext } from "../App";
 import Block from "../components/Block";
 
-const Calendar = ({
-  curDate,
-  todoList,
-  switchDone,
-}: {
-  curDate: Date;
-  todoList: Data[];
-  switchDone: (targetId: number) => void;
-}) => {
+const Calendar = ({ curDate }: { curDate: Date }) => {
+  const todoList = useContext(TodoListContext);
+
   const dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
   const [range, setRange] = useState({ first: curDate, last: curDate });
+
+  const keyValue = useRef(0);
 
   useEffect(() => {
     const firstDay = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
@@ -30,13 +26,16 @@ const Calendar = ({
   function makeBox() {
     const boxs = [];
     for (let i = 0; i < range.first.getDay(); i++) {
-      boxs.push(<Block key={i + 32} switchDone={switchDone} />);
+      boxs.push(<Block key={(keyValue.current += 1)} />);
     }
     for (let i = range.first.getDate(); i < range.last.getDate() + 1; i++) {
-      const todos = todoList.filter((it) => new Date(it.date).getDate() === i);
-      boxs.push(
-        <Block key={i} date={i} todos={todos} switchDone={switchDone} />
+      const todos = todoList!.filter(
+        (it: Data) => new Date(it.date).getDate() === i
       );
+      boxs.push(<Block key={(keyValue.current += 1)} date={i} todos={todos} />);
+    }
+    for (let i = range.last.getDay(); i < dayOfWeek.indexOf("토"); i++) {
+      boxs.push(<Block key={(keyValue.current += 1)} />);
     }
     return boxs;
   }
