@@ -32,7 +32,13 @@ const Calendar = ({ curDate }: { curDate: Date }) => {
       const todos = todoList!.filter(
         (it: Data) => new Date(it.date).getDate() === i
       );
-      boxs.push(<Block key={(keyValue.current += 1)} date={i} todos={todos} />);
+      boxs.push(
+        <Block
+          key={(keyValue.current += 1)}
+          date={new Date(curDate.getFullYear(), curDate.getMonth(), i)}
+          todos={todos}
+        />
+      );
     }
     for (let i = range.last.getDay(); i < dayOfWeek.indexOf("토"); i++) {
       boxs.push(<Block key={(keyValue.current += 1)} />);

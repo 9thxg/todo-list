@@ -1,4 +1,10 @@
-import React, { useEffect, useReducer, useState, createContext } from "react";
+import React, {
+  useEffect,
+  useReducer,
+  useState,
+  createContext,
+  useRef,
+} from "react";
 import { BrowserRouter, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
@@ -6,7 +12,7 @@ import Sidebar from "./components/Sidebar";
 import Calendar from "./pages/Calendar";
 import dummyData from "./dummyData.json";
 
-type Action_type = "INIT" | "EDIT";
+type Action_type = "INIT" | "EDIT" | "CREATE" | "REMOVE" | "FORCEUPDATE";
 
 export interface Data {
   id: number;
@@ -19,18 +25,35 @@ interface Action {
   type: Action_type;
   todoList?: Data[];
   todo?: Data;
+  targetId?: number;
 }
 
 const reducer = (state: Data[], action: Action): Data[] => {
   let newState: Data[] = [];
   switch (action.type) {
     case "INIT": {
-      return action.todoList!;
+      const sortList = action.todoList!.sort((a, b) => b.id - a.id);
+      return sortList;
     }
     case "EDIT": {
       newState = state.map((it) =>
         it.id === action.todo!.id ? { ...action.todo! } : it
       );
+      break;
+    }
+    case "CREATE": {
+      const newTodo: Data = {
+        ...action.todo!,
+      };
+      newState = [newTodo, ...state];
+      break;
+    }
+    case "REMOVE": {
+      newState = state.filter((it) => it.id !== action.targetId);
+      break;
+    }
+    case "FORCEUPDATE": {
+      newState = [...state];
       break;
     }
   }
@@ -47,9 +70,18 @@ function App() {
   const [curDate, setCurDate] = useState(new Date());
   const [todoList, setTodoList] = useState(todoData);
 
+  const dataId = useRef(0);
+
   useEffect(() => {
     dispatch({ type: "INIT", todoList: dummyData });
   }, []);
+
+  useEffect(() => {
+    if (todoData) {
+      dataId.current = todoData[0]?.id + 1;
+    }
+    console.log(dataId);
+  }, [todoData]);
 
   useEffect(() => {
     const firstDay = new Date(
@@ -68,13 +100,47 @@ function App() {
     setTodoList(
       todoData.filter((it) => firstDay <= it.date && it.date <= lastDay)
     );
+    console.log(todoData);
   }, [curDate, todoData]);
 
-  const onToggle = (targetId: number) => {
+  const toggleDone = (targetId: number) => {
     const todo = todoData.find((it) => targetId === it.id);
     const doneTodo = { ...todo!, isDone: !todo!.isDone };
     dispatch({ type: "EDIT", todo: doneTodo });
     console.log(todoData);
+  };
+
+  const onCreate = (date: number, content: string) => {
+    dispatch({
+      type: "CREATE",
+      todo: {
+        id: dataId.current,
+        date: date,
+        content: content,
+        isDone: false,
+      },
+    });
+    dataId.current += 1;
+  };
+
+  const onEdit = (
+    targetId: number,
+    date: number,
+    content: string,
+    isDone: boolean
+  ) => {
+    dispatch({
+      type: "EDIT",
+      todo: { id: targetId, date: date, content: content, isDone: isDone },
+    });
+  };
+
+  const onRemove = (targetId: number) => {
+    dispatch({ type: "REMOVE", targetId: targetId });
+  };
+
+  const forceUpdate = () => {
+    dispatch({ type: "FORCEUPDATE" });
   };
 
   const increaseMonth = () => {
@@ -91,7 +157,9 @@ function App() {
 
   return (
     <TodoListContext.Provider value={todoList}>
-      <DispatchContext.Provider value={{ onToggle }}>
+      <DispatchContext.Provider
+        value={{ toggleDone, onCreate, onRemove, onEdit, forceUpdate }}
+      >
         <BrowserRouter>
           <div className="App">
             <Sidebar />
