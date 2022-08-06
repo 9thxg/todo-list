@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useReducer,
-  useState,
-  createContext,
-  useRef,
-} from "react";
+import { useEffect, useReducer, useState, createContext, useRef } from "react";
 import { BrowserRouter, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";

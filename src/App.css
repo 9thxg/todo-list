@@ -1,6 +1,6 @@
 /* App.tsx */
 .App {
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }
 
 .App {
@@ -14,13 +14,17 @@
   align-items: center;
   justify-content: space-between;
 
+  background-color: #333333;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  width: 20%;
+  width: 10%;
+  height: 100vh;
 
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 40px;
   padding-bottom: 40px;
+
+  color: #cccccc;
 }
 
 .Sidebar_Title {
@@ -38,9 +42,10 @@
 }
 
 .Main {
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: column;
+  flex-wrap: nowrap;
 
   margin-right: 20px;
   margin-left: 20px;
@@ -60,18 +65,21 @@ header .header-date {
 
 header button {
   cursor: pointer;
-  border-radius: 5px;
-  border: 1px solid darkblue;
-  background-color: #3a6cff;
+  border-radius: 20px;
+  border: 1px solid #3a6cff;
+  color: #3a6cff;
+  background-color: #ffffff;
 
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 /* Calendar.tsx */
 .Calendar {
+  overflow: scroll;
+  height: 100vh;
   flex: 5;
 }
 
@@ -87,24 +95,28 @@ header button {
 
 .GridContainer {
   display: grid;
-  height: 90vh;
+
   margin-top: 3px;
 
   grid-template-columns: repeat(7, 1fr);
   /* grid-template-rows: repeat(6, minmax(100px, auto)); */
-  grid-template-rows: repeat(auto-fill, minmax(15%, auto));
+  grid-template-rows: minmax(1fr, auto);
   gap: 3px;
 
   text-align: right;
 }
 
 .Day {
-  border: 1px solid #e2e2e2;
+  border: 1px solid #afafaf;
+  border-radius: 5px;
+
+  padding-right: 7px;
 }
 
 /* Block.tsx */
 .block {
-  border: 1px solid #e2e2e2;
+  border: 1px solid #afafaf;
+  border-radius: 5px;
 }
 
 .block .block_top {
